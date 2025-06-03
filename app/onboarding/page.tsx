@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -9,8 +10,34 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-
+import { SubmitHandler, useForm } from "react-hook-form";
+import { onboardingSchema, OnBoardingSchema } from "../lib/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { onBoardingAction } from "../lib/action";
+import { toast } from "sonner";
+import { GeneralButton } from "../components/SubmitButton";
 const page = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<OnBoardingSchema>({
+    resolver: zodResolver(onboardingSchema),
+  });
+  const onBoardingFormSubmit: SubmitHandler<OnBoardingSchema> = async (
+    data
+  ) => {
+    try {
+      const res = await onBoardingAction(data);
+      console.log("response : ", res);
+      if (res.status === "success") {
+        toast.success(res.message);
+      }
+    } catch (err: any) {
+      toast.error(err?.message);
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-md">
@@ -22,35 +49,51 @@ const page = () => {
             We need the following information to set up your profile !
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-y-5">
-          <form className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onBoardingFormSubmit)}
+          className="space-y-4"
+        >
+          <CardContent className="grid gap-y-5">
             <div className="grid gap-y-2">
-              <Label htmlFor="full-name">Full Name</Label>
+              <Label htmlFor="fullName">Full Name</Label>
               <Input
-                name="full-name"
-                id="full-name"
+                {...register("fullName")}
+                name="fullName"
+                id="fullName"
                 placeholder="Mohammed Samrose"
               />
+              <p className="text-destructive">
+                {errors.fullName && errors.fullName.message}
+              </p>
             </div>
             <div className="grid gap-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="userName">Username</Label>
               <div className="flex rounded-md">
                 <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-muted bg-muted text-sm text-muted-foreground">
                   CalScheduler.com/
                 </span>
                 <Input
+                  {...register("userName")}
                   placeholder="example-user-1"
                   className="rounded-l-none"
+                  name="userName"
+                  id="userName"
                 />
               </div>
+              <p className="text-destructive">
+                {errors.userName && errors.userName.message}
+              </p>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" type="submit">
-            Submit
-          </Button>
-        </CardFooter>
+          </CardContent>
+          <CardFooter>
+            <GeneralButton
+              isSubmitting={isSubmitting}
+              buttonText={"Submit"}
+              loadingText={"Loading"}
+              className="w-full"
+            />
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );
