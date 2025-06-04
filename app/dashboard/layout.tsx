@@ -18,15 +18,35 @@ import {
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import { auth, signOut } from "../lib/auth";
+import { prisma } from "../lib/prisma";
+import { redirect } from "next/navigation";
+import { getUserSession } from "../lib/action";
 
+const getData = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      username: true,
+    },
+  });
+  if (!data?.username) {
+    return redirect("/onboarding");
+  }
+  return data;
+};
 export default async function DashboardLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const session = await auth();
-  const user = session?.user;
+  const session = await getUserSession();
 
+  if (!session) {
+    redirect("/");
+  }
+  const data = await getData(session.user?.id as string);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -39,7 +59,9 @@ export default async function DashboardLayout({
               <DropdownMenuTrigger asChild>
                 <Avatar>
                   <AvatarImage
-                    src={user?.image ?? "https://github.com/shadcn.png"}
+                    src={
+                      session?.user?.image ?? "https://github.com/shadcn.png"
+                    }
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
