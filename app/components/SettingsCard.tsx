@@ -56,6 +56,7 @@ export const SettingCards = ({
 
   const handleDeleteProfileImage = () => {
     setCurrentProfileImage(undefined);
+    setValue("profileImage", "");
   };
 
   return (
@@ -99,15 +100,21 @@ export const SettingCards = ({
                 onClientUploadComplete={(res) => {
                   if (res && res[0]?.ufsUrl) {
                     setCurrentProfileImage(res[0].ufsUrl);
+                    setValue("profileImage", res[0].ufsUrl);
                     toast.success("Image uploaded!");
                   }
                 }}
                 onUploadError={(error: Error) => {
-                  alert(`Upload failed: ${error.message}`);
+                  toast.error(`Upload failed: ${error.message}`);
                 }}
                 className="your-custom-classes"
               />
             )}
+            <Input
+              type="hidden"
+              {...register("profileImage")}
+              value={currentProfileImage || ""}
+            />
           </div>
         </CardContent>
         <CardFooter className="mt-4">

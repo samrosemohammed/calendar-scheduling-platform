@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { auth } from "./auth";
 import { prisma } from "./prisma";
 import { OnBoardingSchema, SettingsSchema } from "./zodSchemas";
@@ -19,6 +20,7 @@ export const onSettingChange = async (data: SettingsSchema) => {
     },
     data: {
       name: data.fullName,
+      image: data.profileImage || null,
     },
   });
   return {
@@ -48,11 +50,48 @@ export const onBoardingAction = async (data: OnBoardingSchema) => {
     data: {
       username: data.userName,
       name: data.fullName,
+      availability: {
+        createMany: {
+          data: [
+            {
+              day: "MONDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "TUESDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "WEDNESDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "THURSDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "FRIDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "SATURDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+            {
+              day: "SUNDAY",
+              fromTime: "09:00",
+              tillTime: "17:00",
+            },
+          ],
+        },
+      },
     },
   });
-  return {
-    data: userData,
-    message: "Congratulations! Your profile is set up.",
-    status: "success",
-  };
+  redirect("/onboarding/grant-id");
 };

@@ -22,5 +22,6 @@ export const settingsSchema = z.object({
     .nonempty("Full Name is required")
     .min(3, "Full Name should be at least 3 characters")
     .max(150),
+  profileImage: z.string().url().optional().or(z.literal("").optional()),
 });
 export type SettingsSchema = z.infer<typeof settingsSchema>;

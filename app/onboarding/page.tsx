@@ -28,15 +28,8 @@ const page = () => {
   const onBoardingFormSubmit: SubmitHandler<OnBoardingSchema> = async (
     data
   ) => {
-    try {
-      const res = await onBoardingAction(data);
-      console.log("response : ", res);
-      if (res.status === "success") {
-        toast.success(res.message);
-      }
-    } catch (err: any) {
-      toast.error(err?.message);
-    }
+    const res = await onBoardingAction(data);
+    console.log("response : ", res);
   };
   return (
     <div className="flex items-center justify-center min-h-screen">
