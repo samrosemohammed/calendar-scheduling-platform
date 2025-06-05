@@ -88,7 +88,7 @@ export default async function DashboardLayout({
             </DropdownMenu>
           </div>
         </div>
-        {children}
+        <div className="p-4">{children}</div>
       </main>
     </SidebarProvider>
   );

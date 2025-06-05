@@ -15,3 +15,12 @@ export const onboardingSchema = z.object({
     }),
 });
 export type OnBoardingSchema = z.infer<typeof onboardingSchema>;
+
+export const settingsSchema = z.object({
+  fullName: z
+    .string()
+    .nonempty("Full Name is required")
+    .min(3, "Full Name should be at least 3 characters")
+    .max(150),
+});
+export type SettingsSchema = z.infer<typeof settingsSchema>;

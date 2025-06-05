@@ -2,11 +2,30 @@
 
 import { auth } from "./auth";
 import { prisma } from "./prisma";
-import { OnBoardingSchema } from "./zodSchemas";
+import { OnBoardingSchema, SettingsSchema } from "./zodSchemas";
 
 export const getUserSession = async () => {
   const session = await auth();
   return session;
+};
+export const onSettingChange = async (data: SettingsSchema) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const userData = await prisma.user.update({
+    where: {
+      id: session.user.id,
+    },
+    data: {
+      name: data.fullName,
+    },
+  });
+  return {
+    data: userData,
+    message: "Profile updated successfully.",
+    status: "success",
+  };
 };
 export const onBoardingAction = async (data: OnBoardingSchema) => {
   const session = await getUserSession();
