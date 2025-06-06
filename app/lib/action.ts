@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "./auth";
 import { prisma } from "./prisma";
 import { OnBoardingSchema, SettingsSchema } from "./zodSchemas";
+import { revalidatePath } from "next/cache";
 
 export const getUserSession = async () => {
   const session = await auth();
@@ -94,4 +95,42 @@ export const onBoardingAction = async (data: OnBoardingSchema) => {
     },
   });
   redirect("/onboarding/grant-id");
+};
+
+export const updateAvailability = async (formData: FormData) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const rawData = Object.fromEntries(formData.entries());
+  const availabilityData = Object.keys(rawData)
+    .filter((key) => key.startsWith("id-"))
+    .map((key) => {
+      const id = key.replace("id-", "");
+      return {
+        id,
+        isActive: formData.get(`isActive-${id}`) === "on",
+        fromTime: formData.get(`fromTime-${id}`) as string,
+        tillTime: formData.get(`tillTime-${id}`) as string,
+      };
+    });
+  try {
+    await prisma.$transaction(
+      availabilityData.map((item) =>
+        prisma.availability.update({
+          where: {
+            id: item.id,
+          },
+          data: {
+            isActive: item.isActive,
+            fromTime: item.fromTime,
+            tillTime: item.tillTime,
+          },
+        })
+      )
+    );
+    revalidatePath("/dashboard/availability");
+  } catch (error) {
+    console.log("Error updating availability:", error);
+  }
 };

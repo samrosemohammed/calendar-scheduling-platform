@@ -14,7 +14,7 @@ interface GenerateButtonProps {
 }
 
 interface SubmitButtonProps {
-  isSubmitting: boolean;
+  isSubmitting?: boolean;
   buttonText: string;
   loadingText?: string;
   variant?:
@@ -34,14 +34,15 @@ export const GeneralButton = ({
   variant,
   className,
 }: SubmitButtonProps) => {
+  const { pending } = useFormStatus();
   return (
     <Button
       className={cn("w-fit", className)}
       variant={variant}
       type="submit"
-      disabled={isSubmitting}
+      disabled={isSubmitting || pending}
     >
-      {isSubmitting ? (
+      {isSubmitting || pending ? (
         <>
           <Loader2 className="animate-spin size-4" /> {loadingText}
         </>
