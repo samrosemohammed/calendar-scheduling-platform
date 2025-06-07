@@ -1,4 +1,5 @@
 "use client";
+import { GeneralButton } from "@/app/components/SubmitButton";
 import { Button } from "@/app/components/ui/button";
 import { ButtonGroup } from "@/app/components/ui/buttonGroup";
 import {
@@ -21,14 +22,32 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
+import { createEventType } from "@/app/lib/action";
+import { EventTypeSchema, eventTypeSchema } from "@/app/lib/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 type VideoCallProvider = "Zoom Meeting" | "Google Meet" | "Microsoft Teams";
 const page = () => {
   const [activePlatform, setActivePlatform] =
     useState<VideoCallProvider>("Google Meet");
-
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    setValue,
+  } = useForm<EventTypeSchema>({
+    resolver: zodResolver(eventTypeSchema),
+  });
+  const onEventTpeCreateSubmit = async (data: EventTypeSchema) => {
+    await createEventType(data);
+  };
+  const handlePlatformChange = (platform: VideoCallProvider) => {
+    setActivePlatform(platform);
+    setValue("videoCallSoftware", platform);
+  };
   return (
     <div className="w-full h-full flex flex-1 items-center justify-center">
       <Card className="w-full">
@@ -38,11 +57,16 @@ const page = () => {
             Create new aapointment type to start booking your events.
           </CardDescription>
         </CardHeader>
-        <form action="">
+        <form onSubmit={handleSubmit(onEventTpeCreateSubmit)}>
           <CardContent className="grid gap-y-5">
             <div className="flex flex-col gap-y-2">
               <Label>Title</Label>
-              <Input placeholder="30 Minute meeting" />
+              <Input {...register("title")} placeholder="30 Minute meeting" />
+              {errors.title && (
+                <p className="text-destructive text-sm">
+                  {errors.title.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>URL Slug</Label>
@@ -50,16 +74,35 @@ const page = () => {
                 <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-muted bg-muted text-sm text-muted-foreground">
                   CalScheduler.com/
                 </span>
-                <Input className="rounded-l-none" placeholder="example-url-1" />
+                <Input
+                  {...register("url")}
+                  className="rounded-l-none"
+                  placeholder="example-url-1"
+                />
               </div>
+              {errors.url && (
+                <p className="text-destructive text-sm">{errors.url.message}</p>
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>Description</Label>
-              <Textarea placeholder="Meet me in this meeting to meet me!" />
+              <Textarea
+                {...register("description")}
+                placeholder="Meet me in this meeting to meet me!"
+              />
+              {errors.description && (
+                <p className="text-destructive text-sm">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>Duration</Label>
-              <Select>
+              <Select
+                onValueChange={(value) => {
+                  setValue("duration", Number(value));
+                }}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select duration" />
                 </SelectTrigger>
@@ -73,16 +116,22 @@ const page = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {errors.duration && (
+                <p className="text-destructive text-sm">
+                  {errors.duration.message}
+                </p>
+              )}
             </div>
             <div className="grid gap-y-2">
               <Label>Video Call Provider</Label>
+              <Input type="hidden" {...register("videoCallSoftware")} />
               <ButtonGroup>
                 <Button
                   type="button"
                   variant={
                     activePlatform === "Zoom Meeting" ? "secondary" : "outline"
                   }
-                  onClick={() => setActivePlatform("Zoom Meeting")}
+                  onClick={() => handlePlatformChange("Zoom Meeting")}
                 >
                   Zoom
                 </Button>
@@ -91,7 +140,7 @@ const page = () => {
                   variant={
                     activePlatform === "Google Meet" ? "secondary" : "outline"
                   }
-                  onClick={() => setActivePlatform("Google Meet")}
+                  onClick={() => handlePlatformChange("Google Meet")}
                 >
                   Google Meet
                 </Button>
@@ -102,7 +151,7 @@ const page = () => {
                       ? "secondary"
                       : "outline"
                   }
-                  onClick={() => setActivePlatform("Microsoft Teams")}
+                  onClick={() => handlePlatformChange("Microsoft Teams")}
                 >
                   Microsoft Teams
                 </Button>
@@ -113,7 +162,11 @@ const page = () => {
             <Button asChild variant={"secondary"}>
               <Link href={"/dashboard"}>Cancel</Link>
             </Button>
-            <Button type="submit">Create Event Type</Button>
+            <GeneralButton
+              buttonText="Create Event Type"
+              loadingText="Loading"
+              isSubmitting={isSubmitting}
+            />
           </CardFooter>
         </form>
       </Card>

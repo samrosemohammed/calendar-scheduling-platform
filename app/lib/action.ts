@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "./auth";
 import { prisma } from "./prisma";
-import { OnBoardingSchema, SettingsSchema } from "./zodSchemas";
+import {
+  EventTypeSchema,
+  OnBoardingSchema,
+  SettingsSchema,
+} from "./zodSchemas";
 import { revalidatePath } from "next/cache";
 
 export const getUserSession = async () => {
@@ -133,4 +137,23 @@ export const updateAvailability = async (formData: FormData) => {
   } catch (error) {
     console.log("Error updating availability:", error);
   }
+};
+
+export const createEventType = async (data: EventTypeSchema) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  console.log("Creating event type with data:", data);
+  await prisma.eventType.create({
+    data: {
+      title: data.title,
+      duration: data.duration,
+      url: data.url,
+      description: data.description,
+      videoCallSoftware: data.videoCallSoftware,
+      userId: session.user.id,
+    },
+  });
+  return redirect("/dashboard");
 };
