@@ -19,6 +19,7 @@ model User {
   grantId       String?
   grantEmail    String?
   accounts      Account[]
+  eventType    EventType[]
   sessions      Session[]
   availability  Availability[]
 
@@ -85,4 +86,18 @@ enum Day {
   FRIDAY
   SATURDAY
   SUNDAY
+}
+
+model EventType {
+  id                String  @id @default(uuid())
+  title             String
+  duration          Int
+  url               String
+  description       String
+  active            Boolean @default(true)
+  videoCallSoftware String  @default("Google Meet")
+  userId            String
+  user              User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
