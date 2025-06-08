@@ -88,7 +88,10 @@ const page = async () => {
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
-                          <Link href={`/${data.username}/${item.url}`}>
+                          <Link
+                            target="_blank"
+                            href={`/${data.username}/${item.url}`}
+                          >
                             <ExternalLink className="size-4 mr-2" />
                             Preview
                           </Link>

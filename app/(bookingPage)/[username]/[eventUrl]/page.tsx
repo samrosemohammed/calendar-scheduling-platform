@@ -12,6 +12,7 @@ import { prisma } from "@/app/lib/prisma";
 import { CalendarX2, Clock, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { formatDate } from "date-fns";
 
 const getData = async (eventUrl: string, username: string) => {
   const data = await prisma.eventType.findFirst({
@@ -47,11 +48,18 @@ const getData = async (eventUrl: string, username: string) => {
   }
   return data;
 };
-const page = async (props: {
+const page = async ({
+  params,
+  searchParams,
+}: {
   params: { username: string; eventUrl: string };
+  searchParams: { date?: string };
 }) => {
-  const { username, eventUrl } = props.params;
+  const { username, eventUrl } = params;
   const data = await getData(eventUrl, username);
+  const selectedDate = searchParams.date
+    ? new Date(searchParams.date)
+    : new Date();
   return (
     <div className="min-h-screen w-screen flex items-center jusityf-center">
       <Card className="max-w-[1000px] w-full mx-auto">
@@ -61,7 +69,7 @@ const page = async (props: {
             This is the booking page for the event. You can customize it further
             based on your requirements.
           </CardDescription>
-          <CardContent className="p-5 md:grid md:grid-cols-[1fr_auto_1fr_auto_1fr]">
+          <CardContent className="p-5 md:grid md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4">
             <div>
               <Image
                 width={40}
@@ -81,7 +89,7 @@ const page = async (props: {
                 <p className="flex items-center">
                   <CalendarX2 className="size-4 mr-2 text-primary" />
                   <span className="text-sm font-medium text-muted-foreground">
-                    23. Sept 2024
+                    {formatDate(selectedDate, "PPPP")}
                   </span>
                 </p>
                 <p className="flex items-center">
@@ -99,7 +107,8 @@ const page = async (props: {
               </div>
             </div>
             <Separator className="h-full w-[1px]" orientation="vertical" />
-            <RenderCalendar />
+            <RenderCalendar availability={data.user?.availability as any} />
+            <Separator className="h-full w-[1px]" orientation="vertical" />
           </CardContent>
         </CardHeader>
       </Card>
