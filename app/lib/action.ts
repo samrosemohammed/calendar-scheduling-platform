@@ -159,7 +159,7 @@ export const createEventType = async (data: EventTypeSchema) => {
   return redirect("/dashboard");
 };
 
-export const createMeetingAction = async (formData) => {
+export const createMeetingAction = async (formData: FormData) => {
   const getUserData = await prisma.user.findUnique({
     where: {
       username: formData.get("username") as string,
@@ -216,4 +216,31 @@ export const createMeetingAction = async (formData) => {
     },
   });
   return redirect("/success");
+};
+
+export const cancelEventAction = async (formData: FormData) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const userData = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      grantEmail: true,
+      grantId: true,
+    },
+  });
+  if (!userData) {
+    throw new Error("User not found");
+  }
+  const data = await nylas.events.destroy({
+    eventId: formData.get("eventId") as string,
+    identifier: userData.grantId as string,
+    queryParams: {
+      calendarId: userData.grantEmail as string,
+    },
+  });
+  revalidatePath("/dashboard/meetings");
 };

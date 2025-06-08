@@ -15,7 +15,7 @@ export const EmptyState = ({
   href,
 }: EmptyStateProps) => {
   return (
-    <div className="flex flex-col flex-1 h-[90vh] items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50">
+    <div className="flex flex-col flex-1 h-[85vh] items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50">
       <div className="flex items-center justify-center size-20 rounded-full bg-primary/10">
         <Ban className="size-10 text-primary" />
       </div>
