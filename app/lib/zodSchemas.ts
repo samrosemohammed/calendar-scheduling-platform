@@ -32,7 +32,7 @@ export const eventTypeSchema = z.object({
     .number()
     .min(15, "Duration must be at least 15 minute")
     .max(60, "Duration must be at most 60 minutes"),
-  url: z.string().url().min(3).max(150),
+  url: z.string().min(3).max(150),
   description: z.string().min(3).max(300),
   videoCallSoftware: z.string().min(3),
 });
