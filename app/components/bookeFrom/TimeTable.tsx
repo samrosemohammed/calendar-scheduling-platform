@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 interface TimeTableProps {
   selectedDate: Date;
   userName: string;
+  duration: number;
 }
 const getData = async (userName: string, selectedDate: Date) => {
   const currentDay = formatDate(selectedDate, "EEEE").toUpperCase();
@@ -97,7 +98,11 @@ const calcualteAvailableTime = (
   });
   return freeSlots.map((slot) => format(slot, "HH:mm"));
 };
-export const TimeTable = async ({ selectedDate, userName }: TimeTableProps) => {
+export const TimeTable = async ({
+  selectedDate,
+  userName,
+  duration,
+}: TimeTableProps) => {
   const { data, nylasCalendarData } = await getData(userName, selectedDate);
   const formattedDate = format(selectedDate, "yyyy-MM-dd");
   const dbAvailability = {
@@ -108,7 +113,7 @@ export const TimeTable = async ({ selectedDate, userName }: TimeTableProps) => {
     formattedDate,
     dbAvailability,
     nylasCalendarData,
-    30
+    duration
   );
   console.log("data", nylasCalendarData);
 
@@ -123,7 +128,10 @@ export const TimeTable = async ({ selectedDate, userName }: TimeTableProps) => {
       <div className="mt-3 max-h-[350px] overflow-y-auto">
         {availableSlot.length > 0 ? (
           availableSlot.map((slot, index) => (
-            <Link key={index} href={"/"}>
+            <Link
+              key={index}
+              href={`?date=${format(selectedDate, "yyyy-MM-dd")}&time=${slot}`}
+            >
               <Button variant={"outline"} className="w-full mb-2 ">
                 {slot}
               </Button>
