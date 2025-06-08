@@ -13,6 +13,7 @@ import { CalendarX2, Clock, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { formatDate } from "date-fns";
+import { TimeTable } from "@/app/components/bookeFrom/TimeTable";
 
 const getData = async (eventUrl: string, username: string) => {
   const data = await prisma.eventType.findFirst({
@@ -109,6 +110,7 @@ const page = async ({
             <Separator className="h-full w-[1px]" orientation="vertical" />
             <RenderCalendar availability={data.user?.availability as any} />
             <Separator className="h-full w-[1px]" orientation="vertical" />
+            <TimeTable selectedDate={selectedDate} userName={username} />
           </CardContent>
         </CardHeader>
       </Card>
