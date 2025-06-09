@@ -244,3 +244,26 @@ export const cancelEventAction = async (formData: FormData) => {
   });
   revalidatePath("/dashboard/meetings");
 };
+
+export const editEventTypeAction = async (
+  data: EventTypeSchema & { id: string }
+) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const eventTypeData = await prisma.eventType.update({
+    where: {
+      id: data.id,
+      userId: session.user.id,
+    },
+    data: {
+      title: data.title,
+      duration: data.duration,
+      url: data.url,
+      description: data.description,
+      videoCallSoftware: data.videoCallSoftware,
+    },
+  });
+  redirect("/dashboard");
+};
