@@ -4,10 +4,13 @@ import { prisma } from "@/app/lib/prisma";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: NextRequest) => {
   const session = await getUserSession();
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "User not authenticated" },
+      { status: 401 }
+    );
   }
   const url = new URL(req.url);
   const code = url.searchParams.get("code");

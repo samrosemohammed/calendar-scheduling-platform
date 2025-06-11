@@ -15,7 +15,7 @@ const page = () => {
             This event is scheduled
           </h1>
           <p className="text-center text-sm text-muted-foreground mt-1">
-            we emailed you a calendar invitation with all the details and video
+            We emailed you a calendar invitation with all the details and video
             call link !!
           </p>
         </CardContent>

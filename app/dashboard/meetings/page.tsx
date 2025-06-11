@@ -38,7 +38,7 @@ const getData = async (userId: string) => {
 const page = async () => {
   const session = await getUserSession();
   const data = await getData(session?.user?.id as string);
-  console.log("Meetings Data:", data);
+
   return (
     <>
       {!data.data.length ? (
@@ -58,25 +58,29 @@ const page = async () => {
           </CardHeader>
           <CardContent>
             {data.data.map((item) => (
-              <form action={cancelEventAction}>
+              <form key={item.id} action={cancelEventAction}>
                 <input name="eventId" type="hidden" value={item.id} />
                 <div className="grid grid-cols-3 justify-between items-center">
                   <div>
                     <p className="text-muted-foreground text-sm">
                       {formatDate(
+                        // @ts-ignore
                         fromUnixTime(item.when.startTime),
                         "EEE, dd MMM"
                       )}
                     </p>
                     <p>
+                      {/* @ts-ignore */}
                       {formatDate(fromUnixTime(item.when.startTime), "hh:mm a")}
                       {" - "}
+                      {/* @ts-ignore */}
                       {formatDate(fromUnixTime(item.when.endTime), "hh:mm a")}
                     </p>
                     <div className="flex items-center mt-1">
                       <Video className="size-4 mr-2 text-primary" />
                       <a
                         className="text-xs text-primary underline underline-offset-4"
+                        // @ts-ignore
                         href={item.conferencing.details.url}
                         target="_blank"
                         rel="noopener noreferrer"

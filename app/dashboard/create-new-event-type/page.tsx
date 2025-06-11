@@ -30,7 +30,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type VideoCallProvider = "Zoom Meeting" | "Google Meet" | "Microsoft Teams";
-const page = () => {
+const Page = () => {
   const [activePlatform, setActivePlatform] =
     useState<VideoCallProvider>("Google Meet");
   const {
@@ -174,4 +174,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

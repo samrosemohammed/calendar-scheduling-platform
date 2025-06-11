@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,11 +12,9 @@ import { Label } from "../components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { onboardingSchema, OnBoardingSchema } from "../lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
 import { onBoardingAction } from "../lib/action";
-import { toast } from "sonner";
 import { GeneralButton } from "../components/SubmitButton";
-const page = () => {
+const Page = () => {
   const {
     register,
     handleSubmit,
@@ -91,4 +88,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default Page;

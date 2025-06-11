@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { CopyLinkMenu } from "../components/CopyLinkMenu";
+import { MenuActiveSwitch } from "../components/EventTypeSwitcher";
 
 const getData = async (userId: string) => {
   const data = await prisma.user.findUnique({
@@ -108,9 +109,11 @@ const page = async () => {
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Trash className="size-4 mr-2" />
-                        Delete
+                      <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/event/${item.id}/delete`}>
+                          <Trash className="size-4 mr-2" />
+                          Delete
+                        </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -129,8 +132,13 @@ const page = async () => {
                   </div>
                 </Link>
                 <div className="bg-muted px-5 py-3 justify-between items-center flex">
-                  <Switch />
-                  <Button>Edit Event</Button>
+                  <MenuActiveSwitch
+                    initialChecked={item.active}
+                    eventTypeId={item.id}
+                  />
+                  <Button asChild>
+                    <Link href={`/dashboard/event/${item.id}`}>Edit Event</Link>
+                  </Button>
                 </div>
               </div>
             ))}

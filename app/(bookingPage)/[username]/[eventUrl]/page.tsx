@@ -1,4 +1,3 @@
-import { Calendar } from "@/app/components/bookeFrom/Calendar";
 import { RenderCalendar } from "@/app/components/bookeFrom/RenderCalendar";
 import {
   Card,
@@ -53,19 +52,19 @@ const getData = async (eventUrl: string, username: string) => {
   }
   return data;
 };
-const page = async ({
+
+export default async function Page({
   params,
   searchParams,
 }: {
-  params: { username: string; eventUrl: string };
-  searchParams: { date?: string; time?: string };
-}) => {
-  const { username, eventUrl } = params;
+  params: Promise<{ username: string; eventUrl: string }>;
+  searchParams: Promise<{ date?: string; time?: string }>;
+}) {
+  const { username, eventUrl } = await params;
+  const { date, time } = await searchParams;
   const data = await getData(eventUrl, username);
-  const selectedDate = searchParams.date
-    ? new Date(searchParams.date)
-    : new Date();
-  const showForm = !!searchParams.date && !!searchParams.time;
+  const selectedDate = date ? new Date(date) : new Date();
+  const showForm = !!date && !!time;
 
   return (
     <div className="min-h-screen w-screen flex items-center jusityf-center">
@@ -121,16 +120,8 @@ const page = async ({
                 action={createMeetingAction}
                 className="flex flex-col gap-y-4"
               >
-                <input
-                  type="hidden"
-                  name="fromTime"
-                  value={searchParams.time}
-                />
-                <input
-                  type="hidden"
-                  name="eventDate"
-                  value={searchParams.date}
-                />
+                <input type="hidden" name="fromTime" value={time} />
+                <input type="hidden" name="eventDate" value={date} />
                 <input
                   type="hidden"
                   name="meetingLength"
@@ -141,7 +132,7 @@ const page = async ({
                   name="provider"
                   value={data?.videoCallSoftware}
                 />
-                <input type="hidden" name="username" value={params.username} />
+                <input type="hidden" name="username" value={username} />
                 <input type="hidden" name="eventTypeId" value={data.id} />
                 <div className="flex flex-col gap-y-1">
                   <Label>Your Name</Label>
@@ -219,5 +210,4 @@ const page = async ({
       )}
     </div>
   );
-};
-export default page;
+}

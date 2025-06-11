@@ -145,7 +145,6 @@ export const createEventType = async (data: EventTypeSchema) => {
   if (!session?.user?.id) {
     throw new Error("User not authenticated");
   }
-  console.log("Creating event type with data:", data);
   await prisma.eventType.create({
     data: {
       title: data.title,
@@ -266,4 +265,67 @@ export const editEventTypeAction = async (
     },
   });
   redirect("/dashboard");
+};
+
+export const updateEventTypeStatus = async (
+  prevState: any,
+  {
+    eventTypeId,
+    isChecked,
+  }: {
+    eventTypeId: string;
+    isChecked: boolean;
+  }
+) => {
+  try {
+    const session = await getUserSession();
+    if (!session?.user?.id) {
+      throw new Error("User not authenticated");
+    }
+    const data = await prisma.eventType.update({
+      where: {
+        id: eventTypeId,
+        userId: session.user.id,
+      },
+      data: {
+        active: isChecked,
+      },
+    });
+    revalidatePath("/dashboard");
+    return {
+      status: "success",
+      message: `Event type ${isChecked ? "activated" : "deactivated"} successfully.`,
+    };
+  } catch (err) {
+    return {
+      status: "error",
+      message: "Failed to update event type status. Please try again.",
+    };
+  }
+};
+
+export const deleteEventTypeAction = async (formData: FormData) => {
+  const session = await getUserSession();
+  if (!session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const data = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      eventType: true,
+    },
+  });
+  if (!data || data.eventType.length === 0) {
+    throw new Error("No event types found for this user.");
+  }
+  await prisma.eventType.delete({
+    where: {
+      id: formData.get("id") as string,
+      userId: session.user.id,
+    },
+  });
+
+  return redirect("/dashboard");
 };

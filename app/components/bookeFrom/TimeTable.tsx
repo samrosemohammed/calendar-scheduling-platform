@@ -73,6 +73,7 @@ const calcualteAvailableTime = (
     "yyyy-MM-dd HH:mm",
     new Date()
   );
+  //@ts-ignore
   const busySlots = nylasData.data[0].timeSlots.map((slot) => ({
     start: fromUnixTime(slot.startTime),
     end: fromUnixTime(slot.endTime),
@@ -115,7 +116,6 @@ export const TimeTable = async ({
     nylasCalendarData,
     duration
   );
-  console.log("data", nylasCalendarData);
 
   return (
     <div>

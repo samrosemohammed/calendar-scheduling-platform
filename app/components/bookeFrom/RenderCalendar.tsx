@@ -37,7 +37,6 @@ export const RenderCalendar = ({ availability }: RenderCalendarProps) => {
     url.searchParams.set("date", date.toString());
     router.push(url.toString());
   };
-  console.log("availability", availability);
   const isDateUnavailable = (date: DateValue) => {
     const dayOfWeek = date.toDate(getLocalTimeZone()).getDay();
     const adjustedIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
