@@ -57,7 +57,7 @@ export default async function DashboardLayout({
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar>
+                <Avatar className="cursor-pointer">
                   <AvatarImage
                     src={
                       session?.user?.image ?? "https://github.com/shadcn.png"
@@ -66,7 +66,7 @@ export default async function DashboardLayout({
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
+              <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>My Profile</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

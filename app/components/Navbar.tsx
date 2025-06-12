@@ -8,7 +8,7 @@ export const NavBar = () => {
       <Link className="text-xl font-bold" href={"/"}>
         Cal<span className="text-blue-500">Scheduler</span>
       </Link>
-      <div className="hidden md:flex md:justify-end md:space-x-4">
+      <div className="flex justify-end space-x-4">
         <ThemeToggle />
         <AuthDialog />
       </div>
