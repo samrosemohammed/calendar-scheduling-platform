@@ -1,6 +1,6 @@
 # CalScheduler
 
-A simple, open-source calendar scheduling app that allows you to create and manage events with ease.
+A simple calendar scheduling app that allows you to create and manage events with ease.
 <br/>
 Visit the hosted Url: https://cal.mohammedsamrose.com.np/
 
