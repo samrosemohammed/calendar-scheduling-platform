@@ -1,4 +1,3 @@
-import { Prisma } from "@/app/generated/prisma";
 import { nylas } from "@/app/lib/nylas";
 import { prisma } from "@/app/lib/prisma";
 import {
@@ -13,6 +12,7 @@ import {
 import Link from "next/link";
 import { GetFreeBusyResponse, NylasResponse } from "nylas";
 import { Button } from "../ui/button";
+import { Prisma } from "@prisma/client";
 
 interface TimeTableProps {
   selectedDate: Date;
