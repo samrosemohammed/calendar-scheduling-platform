@@ -5,13 +5,11 @@ import {
   CalendarDate,
   isToday,
   getLocalTimeZone,
-  isSameMonth,
 } from "@internationalized/date";
 import { cn } from "@/app/lib/utils";
 export const CalendarCell = ({
   state,
   date,
-  currentMonth,
   isUnavailable,
 }: {
   state: CalendarState;
@@ -19,8 +17,8 @@ export const CalendarCell = ({
   currentMonth: CalendarDate;
   isUnavailable?: boolean;
 }) => {
-  let ref = useRef(null);
-  let {
+  const ref = useRef(null);
+  const {
     cellProps,
     buttonProps,
     isSelected,

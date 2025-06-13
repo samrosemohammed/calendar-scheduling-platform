@@ -1,29 +1,15 @@
 "use client";
-import {
-  Calendar,
-  CalendarCheck,
-  Home,
-  HomeIcon,
-  Inbox,
-  Search,
-  Settings,
-  User2,
-} from "lucide-react";
+import { CalendarCheck, HomeIcon, Settings, User2 } from "lucide-react";
 
 import {
   Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  useSidebar,
 } from "@/app/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/app/lib/utils";
+import { useEffect, useRef } from "react";
 
 // Menu items.
 const items = [
@@ -51,8 +37,16 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const previousPathname = useRef(pathname);
+  const { setOpenMobile, isMobile } = useSidebar();
+  useEffect(() => {
+    if (pathname !== previousPathname.current && isMobile) {
+      setOpenMobile(false);
+    }
+    previousPathname.current = pathname;
+  }, [pathname, isMobile, setOpenMobile]);
   return (
-    <Sidebar>
+    <Sidebar className="w-64">
       <SidebarHeader className="border-b h-14 mb-4">
         <p className="font-semibold">
           Cal<span className="text-primary">Scheduler</span>

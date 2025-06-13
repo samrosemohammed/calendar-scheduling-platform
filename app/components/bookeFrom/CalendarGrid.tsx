@@ -1,4 +1,4 @@
-import { useCalendarGrid, useLocale } from "react-aria";
+import { useCalendarGrid } from "react-aria";
 import { CalendarState } from "@react-stately/calendar";
 import { DateDuration, endOfMonth } from "@internationalized/date";
 import { CalendarCell } from "./CalendarCell";
@@ -13,10 +13,9 @@ export const CalendarGrid = ({
   offset?: DateDuration;
   isDateUnavailable?: (date: DateValue) => boolean;
 }) => {
-  let { locale } = useLocale();
   const startDate = state.visibleRange.start.add(offset);
   const endDate = endOfMonth(startDate);
-  let { gridProps, headerProps, weekDays, weeksInMonth } = useCalendarGrid(
+  const { gridProps, headerProps, weekDays, weeksInMonth } = useCalendarGrid(
     {
       startDate,
       endDate,

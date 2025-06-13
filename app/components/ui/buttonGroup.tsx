@@ -3,6 +3,7 @@ import { cn } from "@/app/lib/utils";
 import { Children, cloneElement, ReactElement } from "react";
 interface ButtonGroupProps {
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: ReactElement<any>[];
 }
 export const ButtonGroup = ({ className, children }: ButtonGroupProps) => {

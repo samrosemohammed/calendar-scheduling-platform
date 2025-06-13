@@ -45,10 +45,12 @@ export const onBoardingAction = async (data: OnBoardingSchema) => {
     },
   });
   if (existingUserName && existingUserName.id !== session?.user?.id) {
-    throw new Error(
-      "Username is already taken. Please choose a different one."
-    );
+    return {
+      status: "error",
+      message: "Username is already taken. Please choose a different one.",
+    };
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const userData = await prisma.user.update({
     where: {
       id: session?.user?.id,
@@ -199,6 +201,7 @@ export const createMeetingAction = async (formData: FormData) => {
       },
       conferencing: {
         autocreate: {},
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         provider: provider as any,
       },
       participants: [
@@ -234,6 +237,7 @@ export const cancelEventAction = async (formData: FormData) => {
   if (!userData) {
     throw new Error("User not found");
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const data = await nylas.events.destroy({
     eventId: formData.get("eventId") as string,
     identifier: userData.grantId as string,
@@ -251,6 +255,7 @@ export const editEventTypeAction = async (
   if (!session?.user?.id) {
     throw new Error("User not authenticated");
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const eventTypeData = await prisma.eventType.update({
     where: {
       id: data.id,
@@ -268,6 +273,7 @@ export const editEventTypeAction = async (
 };
 
 export const updateEventTypeStatus = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
   {
     eventTypeId,
@@ -282,6 +288,7 @@ export const updateEventTypeStatus = async (
     if (!session?.user?.id) {
       throw new Error("User not authenticated");
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const data = await prisma.eventType.update({
       where: {
         id: eventTypeId,
@@ -296,6 +303,7 @@ export const updateEventTypeStatus = async (
       status: "success",
       message: `Event type ${isChecked ? "activated" : "deactivated"} successfully.`,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     return {
       status: "error",

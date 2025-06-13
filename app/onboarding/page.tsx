@@ -14,6 +14,7 @@ import { onboardingSchema, OnBoardingSchema } from "../lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { onBoardingAction } from "../lib/action";
 import { GeneralButton } from "../components/SubmitButton";
+import { toast } from "sonner";
 const Page = () => {
   const {
     register,
@@ -25,8 +26,11 @@ const Page = () => {
   const onBoardingFormSubmit: SubmitHandler<OnBoardingSchema> = async (
     data
   ) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const res = await onBoardingAction(data);
-    console.log("response : ", res);
+    if (res.status === "error") {
+      toast.error(res.message);
+    }
   };
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -50,7 +54,7 @@ const Page = () => {
                 {...register("fullName")}
                 name="fullName"
                 id="fullName"
-                placeholder="Mohammed Samrose"
+                placeholder="Your Name"
               />
               <p className="text-destructive">
                 {errors.fullName && errors.fullName.message}

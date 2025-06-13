@@ -4,8 +4,7 @@ import { getUserSession } from "../lib/action";
 import { EmptyState } from "../components/EmptyState";
 import { Button } from "../components/ui/button";
 import Link from "next/link";
-import { ExternalLink, Link2, Pen, Settings, Trash, User2 } from "lucide-react";
-import { Switch } from "../components/ui/switch";
+import { ExternalLink, Pen, Settings, Trash, User2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

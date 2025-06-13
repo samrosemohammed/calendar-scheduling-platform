@@ -9,6 +9,7 @@ export const CopyLinkMenu = ({ meetingUrl }: { meetingUrl: string }) => {
       await navigator.clipboard.writeText(meetingUrl);
       toast.success("Link copied to clipboard!");
     } catch (err) {
+      console.error(err);
       toast.error("Failed to copy link.");
     }
   };

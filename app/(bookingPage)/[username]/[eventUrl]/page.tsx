@@ -197,6 +197,7 @@ export default async function Page({
                 </div>
               </div>
               <Separator className="h-full w-[1px]" orientation="vertical" />
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               <RenderCalendar availability={data.user?.availability as any} />
               <Separator className="h-full w-[1px]" orientation="vertical" />
               <TimeTable

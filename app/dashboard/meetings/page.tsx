@@ -64,23 +64,28 @@ const page = async () => {
                   <div>
                     <p className="text-muted-foreground text-sm">
                       {formatDate(
-                        // @ts-ignore
+                        // @ts-expect-error 'startTime' may not be present on this type
                         fromUnixTime(item.when.startTime),
                         "EEE, dd MMM"
                       )}
                     </p>
                     <p>
-                      {/* @ts-ignore */}
-                      {formatDate(fromUnixTime(item.when.startTime), "hh:mm a")}
+                      {
+                        // @ts-expect-error 'startTime' may not be present on this type
+                        formatDate(fromUnixTime(item.when.startTime), "hh:mm a")
+                      }
                       {" - "}
-                      {/* @ts-ignore */}
-                      {formatDate(fromUnixTime(item.when.endTime), "hh:mm a")}
+
+                      {
+                        // @ts-expect-error 'endTime' may not be present on this type
+                        formatDate(fromUnixTime(item.when.endTime), "hh:mm a")
+                      }
                     </p>
                     <div className="flex items-center mt-1">
                       <Video className="size-4 mr-2 text-primary" />
                       <a
                         className="text-xs text-primary underline underline-offset-4"
-                        // @ts-ignore
+                        // @ts-expect-error 'details' may not be present on this type
                         href={item.conferencing.details.url}
                         target="_blank"
                         rel="noopener noreferrer"

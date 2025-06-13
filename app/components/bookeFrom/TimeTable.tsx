@@ -73,7 +73,8 @@ const calcualteAvailableTime = (
     "yyyy-MM-dd HH:mm",
     new Date()
   );
-  //@ts-ignore
+
+  // @ts-expect-error 'timeSlots' may not be present on this type
   const busySlots = nylasData.data[0].timeSlots.map((slot) => ({
     start: fromUnixTime(slot.startTime),
     end: fromUnixTime(slot.endTime),
@@ -90,6 +91,7 @@ const calcualteAvailableTime = (
     return (
       isAfter(slot, now) &&
       !busySlots.some(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (busy: { start: any; end: any }) =>
           (!isBefore(slot, busy.start) && !isBefore(slotEnd, busy.end)) ||
           (isBefore(slot, busy.start) && isAfter(slotEnd, busy.end)) ||

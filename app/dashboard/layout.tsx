@@ -17,7 +17,7 @@ import {
 } from "../components/ui/dropdown-menu";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
-import { auth, signOut } from "../lib/auth";
+import { signOut } from "../lib/auth";
 import { prisma } from "../lib/prisma";
 import { redirect } from "next/navigation";
 import { getUserSession } from "../lib/action";
@@ -46,12 +46,13 @@ export default async function DashboardLayout({
   if (!session) {
     redirect("/");
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const data = await getData(session.user?.id as string);
   return (
     <SidebarProvider>
       <AppSidebar />
       <main className="flex-1 flex flex-col">
-        <div className="h-14 flex items-center justify-between px-4 border-b">
+        <div className="h-14 flex items-center justify-between px-4 py-2.5 border-b">
           <SidebarTrigger />
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -88,7 +89,7 @@ export default async function DashboardLayout({
             </DropdownMenu>
           </div>
         </div>
-        <div className="p-4">{children}</div>
+        <div className="p-4 h-full">{children}</div>
       </main>
     </SidebarProvider>
   );

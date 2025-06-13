@@ -18,7 +18,7 @@ import { onSettingChange } from "../lib/action";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
-import { UploadButton, UploadDropzone } from "../lib/uploadthing";
+import { UploadDropzone } from "../lib/uploadthing";
 
 interface SettingsCardProps {
   fullName: string;
@@ -49,8 +49,12 @@ export const SettingCards = ({
       if (res.status === "success") {
         toast.success(res.message);
       }
-    } catch (err: any) {
-      toast.error(err?.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 

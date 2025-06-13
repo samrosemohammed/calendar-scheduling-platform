@@ -12,13 +12,13 @@ export const Calendar = (
   }
 ) => {
   const { locale } = useLocale();
-  let state = useCalendarState({
+  const state = useCalendarState({
     createCalendar,
     ...props,
     visibleDuration: { months: 1 },
     locale,
   });
-  let { calendarProps, prevButtonProps, nextButtonProps, title } = useCalendar(
+  const { calendarProps, prevButtonProps, nextButtonProps } = useCalendar(
     props,
     state
   );
